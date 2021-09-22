@@ -1,0 +1,25 @@
+<%- layout('./layouts/boilerplate') %> 
+
+<div class="row justify-content-center">
+  <div class="col-10 col-md-8">
+    <section class="card">
+      <h1 class="card-header"><%= document.name %></h1>
+      <div class="card-body">
+        <p class="card-text"><%= document.description %></p>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">Issuing Authority: <%= document.issuingAuthority %></li>
+        <li class="list-group-item">Website: <a href="<%= document.website %>" target="_blank" rel="noopener noreferrer"><%= document.website %></a></li>
+        <li class="list-group-item text-muted">
+          <% for(let category of document.category) { %> 
+            <span class="badge bg-secondary"><%= category.name %></span>
+            <% } %>
+        </li>
+      </ul>
+      <div class="card-body">
+        <a href="/admin/documents/<%= document._id %>/edit"><button class="btn btn-primary">Edit</button></a>
+      </div>
+    </section>
+    <a href="/admin/documents">Back</a>
+  </div>
+</div>

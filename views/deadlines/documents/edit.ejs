@@ -1,0 +1,21 @@
+<%- layout('./layouts/boilerplate') %> 
+
+<section class="row justify-content-center">
+  <div class="col-8">
+    <h1 class="mb-3">Update <%= expiration.document.name %> Expiration</h1>
+    <form class="row justify-content-center mb-3" action="/deadlines/document/<%= expiration._id %>?_method=PUT" method="POST" >
+      <div class="col-6 input-group mb-3">
+        <label class="input-group-text" id="basic-addon2" for="expires"><%= expiration.formattedExpires %> &#8594;</label>
+        <input class="form-control" type="date" name="expires" id="expires" value="<%= expiration.expiresDateValue %>">
+      </div>
+      <div style="display: none;">
+        <input type="text" name="document" id="document" value="<%= expiration.document._id %>">
+      </div>
+      <button class="col-auto btn btn-success">Update</button>
+    </form>
+  </div>
+</section>
+
+
+
+<a href="/deadlines/document/<%= expiration._id %> ">Cancel</a>

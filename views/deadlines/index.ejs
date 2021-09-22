@@ -1,0 +1,32 @@
+<%- layout('./layouts/boilerplate') %> 
+
+<h1>Your Deadlines</h1>
+<section class="row mb-4">
+  <h2>Documents:</h2>
+  <div class="list-group mb-4">
+    <% for(let expiration of expirations) { %>
+      <a href="/deadlines/document/<%= expiration._id %>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-start">
+        <div class="ms-2 me-auto">
+          <div class="fw-bold "><%= expiration.document.name %></div>
+          Expires: <span class="<%= expiration.daysUntilDue <= 180 ? 'text-danger' : 'text-body' %>"><%= expiration.formattedExpires %></span>
+        </div>
+        <span class="badge <%= expiration.daysUntilDue <= 180 ? 'bg-danger' : 'bg-primary' %> rounded-pill"><%= expiration.daysUntilDue >= 365 ? Math.floor(expiration.daysUntilDue / 365) : expiration.daysUntilDue %><%= expiration.daysUntilDue >= 365 ? ' year(s)' : ' days' %></span>
+      </a>
+  <% } %> 
+  <a href="/deadlines/new/document">+ New Document</a>
+  </div>
+
+  <h2>Recurring:</h2>
+  <div class="list-group mb-4">
+    <% for(let r of recurring) { %> 
+      <a href="/deadlines/recurring/<%= r._id %>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-start">
+        <div class="ms-2 me-auto">
+          <div class="fw-bold"><%= r.name %></div>
+          Next Due: <span class="<%= r.daysUntilDue <= 14 ? 'text-danger' : 'text-body' %>"><%= r.formattedDueDate %></span>
+        </div>
+        <span class="badge <%= r.daysUntilDue <= 14 ? 'bg-danger' : 'bg-primary' %> rounded-pill"><%= r.daysUntilDue %> days</span>
+      </a>
+  <% } %> 
+  <a href="/deadlines/new/recurring">+ New Recurring</a>
+  </div>
+</section>

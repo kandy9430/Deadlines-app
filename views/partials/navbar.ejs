@@ -1,0 +1,58 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+  <div class="container-fluid">
+    <a class="navbar-brand fs-3" href="#">Deadlines</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse fs-5" id="navbarNavAltMarkup">
+      <% if(currentUser && currentUser.admin) { %> 
+      <div class="navbar-nav">
+        <a class="nav-link" href="/">Home</a>
+        <a class="nav-link" href="/admin/documents">Documents</a>
+        <a class="nav-link" href="/admin/users">Users</a>
+      </div>
+      <% } else { %> 
+      <div class="navbar-nav">
+        <a class="nav-link" href="/">Home</a>
+        <a class="nav-link" href="/deadlines">Deadlines</a>
+        <a class="nav-link" href="/deadlines/new/type">New</a>
+      </div>
+      <% } %> 
+      <div class="navbar-nav ms-auto">
+        <div class="dropdown fs-4">
+          <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-user position-relative">
+              <% if(currentUser && unreadNotifications.length) { %> 
+              <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+                <span class="visually-hidden">New alerts</span>
+              </span>
+              <% } %> 
+            </i>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end w-25 p-1" aria-labelledby="dropdownMenuLink">
+            <% if(currentUser) { %>
+            <li><h3 class="dropdown-header"><a href="#"><%= currentUser.username %> </a></h3></li>
+            <% if(currentUser.admin) { %> 
+            <p class="dropdown-header"><i class="fas fa-star"></i> Admin</p>
+            <% } %> 
+            <li><hr class="dropdown-divider"></li>
+            <li><a href="/user/notifications" class="dropdown-item">Notifications 
+              <% if(currentUser && unreadNotifications.length) { %> 
+              <span class="badge bg-danger"><%= unreadNotifications.length %></span>
+              <% } %> 
+            </a></li>
+            <li><a href="#" class="dropdown-item">Account Settings</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            <% } else { %> 
+            <li><a class="dropdown-item" href="/login">Login</a></li>
+            <li><a class="dropdown-item" href="/register">Register</a></li>
+            <% } %> 
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  
+</nav>

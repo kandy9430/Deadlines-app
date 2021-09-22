@@ -1,0 +1,63 @@
+<%- layout('./layouts/boilerplate') %>
+<div class="row justify-content-center">
+  <div class="col-10 col-md-8 col-lg-6">
+    <section class="card">
+      <h1 class="card-header">New Recurring Deadline</h1>
+      <form class="card-body needs-validation" action="/deadlines/new/recurring" method="POST" novalidate>
+        <fieldset class="mb-3">
+          <label class="form-label">Category:</label>
+          <% for(let category of recurringHelpers.categories) { %>
+          <div class="form-check">
+            <input required class="form-check-input" type="radio" name="category" id="<%= category %>" value="<%= category %>" >
+            <label class="form-check-label" for="<%= category %>"><%= category %> </label>
+          </div>
+          <% } %> 
+          <div class="form-check">
+            <input required class="form-check-input" type="radio" name="category" id="other">
+            <label class="form-check-label" for="other">Other: <input type="text" name="" id="other-category-input" disabled></label>
+            <div class="invalid-feedback">
+              Please choose a category
+            </div>
+          </div>
+        </fieldset>
+        <div class="mb-3">
+          <label class="form-label" for="name">Name:</label>
+          <input class="form-control" type="text" name="name" id="name" required>
+          <div class="invalid-feedback">
+            Please enter a name
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="interval">Interval:</label>
+          <select class="form-select" name="interval" id="interval" required>
+            <option selected disabled value="">--Select Interval--</option>
+            <% for(let interval of recurringHelpers.intervals) {%> 
+              <option value="<%= interval.value %> "><%= interval.name %> </option>
+            <% } %> 
+          </select>
+          <div class="invalid-feedback">
+            Please choose a valid interval
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="nextDue">Next Due Date:</label>
+          <input class="form-control" type="date" name="nextDue" id="nextDue" required>
+          <div class="invalid-feedback">
+            Please enter the next due date
+          </div>
+        </div>
+        <div class="d-grid col-6 mx-auto">
+          <button class="btn btn-success">Submit</button>
+        </div>
+      </form>
+      <div class="card-footer">
+        <a class="" href="/deadlines/new/type">Previous</a>
+      </div>
+    </section>
+  </div>
+</div>
+
+
+
+
+<script src="/scripts/newRecurring.js"></script>

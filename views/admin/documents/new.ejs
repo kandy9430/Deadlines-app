@@ -1,0 +1,59 @@
+<%- layout('./layouts/boilerplate') %>
+<div class="row justify-content-center">
+  <div class="col-10 col-md-8 col-lg-6">
+    <section class="card">
+      <h1 class="card-header">New Document:</h1>
+      <form class="card-body needs-validation document-form" action="/admin/documents" method="POST" novalidate>
+        <div class="mb-3">
+          <label class="form-label" for="name">Name:</label>
+          <input required class="form-control" type="text" name="name" id="name" autofocus>
+          <div class="invalid-feedback">
+            Enter a valid name
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="description">Description:</label>
+          <textarea required class="form-control" name="description" id="description" cols="30" rows="5"></textarea>
+          <div class="invalid-feedback">
+            Enter a description
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="issuingAuthority">Issuing Authority:</label>
+          <input required class="form-control" type="text" name="issuingAuthority" id="issuingAuthority">
+          <div class="invalid-feedback">
+            Enter the issuing authority
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="website">Website:</label>
+          <input required class="form-control" type="text" name="website" id="website">
+          <div class="invalid-feedback">
+            Please enter a website URL
+          </div>
+        </div>
+        <fieldset class="category-group mb-3">
+          <label class="form-label">Category:</label>
+          <% categories.forEach((category, i, categories) => { %>
+          <div class="form-check">
+            <input required class="form-check-input" type="checkbox" name="category" id="<%= category.name %>" value="<%= category._id %>">
+            <label class="form-check-label" for="<%= category.name %>"><%= category.name %></label>
+            <% if(i === categories.length - 1) { %> 
+            <div class="invalid-feedback">
+              Please choose at least one category
+            </div>
+            <% } %> 
+          </div>
+          <% }) %>
+        </fieldset>
+        <div class="d-grid col-6 mx-auto">
+          <button class="btn btn-success">Submit</button>
+        </div>
+      </form>
+    </section>
+  </div>
+</div>
+
+
+
+<script src="/scripts/validateCheckGroup.js"></script>

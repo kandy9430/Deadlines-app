@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deadlines</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+  <script src="https://kit.fontawesome.com/21173a6c70.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="styles/home.css">
+</head>
+
+<body>
+  <main class="container vh-100 vw-100">
+    <nav class="home-navbar row justify-content-between pt-2">
+      <div class="col">
+        <a class="navbar-brand fs-2 fw-bold text-dark" href="<%= currentUser && currentUser.admin ? '/admin/documents' : '/deadlines' %>">Deadlines</a>
+      </div>
+      <div class="col-1 dropdown fs-4">
+        <a class="nav-link dropdown-toggle fs-2 fw-bold text-dark" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="fas fa-user position-relative">
+            <% if(currentUser && unreadNotifications.length) { %> 
+            <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+              <span class="visually-hidden">New alerts</span>
+            </span>
+            <% } %> 
+          </i>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end w-25 p-1" aria-labelledby="dropdownMenuLink">
+          <% if(currentUser) { %>
+          <li><h3 class="dropdown-header"><a href="#"><%= currentUser.username %> </a></h3></li>
+          <% if(currentUser.admin) { %> 
+          <p class="dropdown-header"><i class="fas fa-star"></i> Admin</p>
+          <% } %> 
+          <li><hr class="dropdown-divider"></li>
+          <li><a href="/user/notifications" class="dropdown-item">Notifications 
+            <% if(currentUser && unreadNotifications.length) { %> 
+            <span class="badge bg-danger"><%= unreadNotifications.length %></span>
+            <% } %> 
+          </a></li>
+          <li><a href="#" class="dropdown-item">Account Settings</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+          <% } else { %> 
+          <li><a class="dropdown-item" href="/login">Login</a></li>
+          <li><a class="dropdown-item" href="/register">Register</a></li>
+          <% } %> 
+        </ul>
+      </div> 
+    </nav>
+    <div class="row justify-content-center h-75">
+      <div class="d-flex flex-column justify-content-between col-12 text-center my-auto h-50">
+        <h1 class="h-25 text-uppercase">Deadlines</h1>
+        <p class="fw-bold">The easy way to keep track of expiration dates, due dates, or any other deadlines.</p>
+        <p class="fw-bold">Login or register to begin</p>
+        <div class="row w-25 mx-auto justify-content-between">
+          <% if(currentUser) { %> 
+            <% if(currentUser.admin) { %> 
+            <a href="/admin/documents" class="col btn btn-outline-dark fw-bold">View Documents</a>
+            <% } else { %> 
+            <a href="/deadlines" class="col btn btn-outline-dark fw-bold">View Deadlines</a>
+              <% } %> 
+          <% } else { %> 
+          <a href="/register" class="col btn btn-outline-dark fw-bold">Register</a>
+          <a href="/login" class="col btn btn-outline-dark fw-bold">Login</a>
+          <% } %> 
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+</body>
+</html>
+
+
+

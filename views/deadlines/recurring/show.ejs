@@ -1,0 +1,23 @@
+<%- layout('./layouts/boilerplate') %>
+<div class="row justify-content-center">
+  <div class="col-10 col-md-8">
+    <section class="card">
+      <h1 class="card-header"><%= deadline.name %></h1>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">Next Due: <span class="fw-bold <%= deadline.daysUntilDue <= 14 ? 'text-danger' : 'text-body' %>"><%= deadline.formattedDueDate %></span></li>
+        <li class="list-group-item">Due every 
+          <span class="fw-bold"><%= deadline.interval === 1 ? 'month' : `${deadline.interval} months` %></span>
+        </li>
+        <li class="list-group-item">Due on the <span class="fw-bold"><%= day %></span> of the month</li>
+        <li class="list-group-item text-muted"><span class="badge bg-secondary"><%= deadline.category %></span></li>
+      </ul>
+      <div class="card-body">
+        <a href="/deadlines/recurring/<%= deadline._id %>/edit" class="card-link btn btn-primary">Edit</a>
+        <form class="d-inline card-link" method="POST" action="/deadlines/recurring/<%= deadline._id %>?_method=DELETE ">
+          <button class="btn btn-danger">Delete</button>
+        </form>
+      </div>
+    </section>
+    <a href="/deadlines">Back</a>
+  </div>
+</div>

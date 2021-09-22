@@ -1,0 +1,32 @@
+<%- layout('./layouts/boilerplate') %> 
+
+<h1 class="mb-4">List of all Documents</h1>
+<section class="mb-4">
+  <form class="row justify-content-start needs-validation" method="POST" action="/admin/documents/category" novalidate>
+    <div class="input-group input-group-lg">
+      <input type="text" name="name" id="name" class="form-control" placeholder="Add a new Category" required>
+      <button class="btn btn-outline-dark">Add</button>
+      <div class="invalid-feedback">
+        Enter a new category
+      </div>
+    </div>
+  </form>
+</section>
+<section class="row mb-4">
+  <div class="mb-4">
+    <!-- <a class="d-block" href="/admin/documents/category/new">+ New Category</a> -->
+    <a class="" href="/admin/documents/new">+ New Document</a>  
+  </div>
+  <% for(let category of categories) { %>
+  <div class="mb-4">
+    <h2><%= category.name %></h2>
+    <% for(let document of category.documents) { %>
+    <a href="/admin/documents/<%= document._id %>" class="list-group-item list-group-item-action">
+      <%= document.name %>
+    </a>
+    <% } %>
+  </div>
+  <% } %> 
+</section>
+
+

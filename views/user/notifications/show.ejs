@@ -1,0 +1,64 @@
+<%- layout('./layouts/boilerplate') %>
+<div class="row justify-content-center">
+  <div class="col-10 col-md-8 text-center mb-3">
+    <h1>Notifications</h1>
+    <% if(!currentUser.notifications.length) { %> 
+    <p>You have no notifications</p>
+    <% } %> 
+  </div>
+  <div class="col-10 col-md-8 accordion mb-3" id="notificationAccordian">
+    <% currentUser.notifications.forEach((notification, i) => { %> 
+    <div class="accordion-item position-relative">
+      <% if(!notification.wasRead) { %> 
+      <span class="position-absolute top-0 start-0 translate-middle p-2 bg-danger border border-light rounded-circle" style="z-index: 10000;">
+        <span class="visually-hidden">New alerts</span>
+      </span>
+      <% } %>
+      <% if(notification._id == id) { %> 
+      <a href="/user/notifications" style="text-decoration: none;">
+      <% } else { %> 
+      <form method="POST" action="/user/notifications/<%= notification._id %>?_method=PUT" class="accordion-header notification-read-form" id="heading<%= i %>">
+      <% } %>
+        <button class="accordion-button <%= notification._id == id ? '' : 'collapsed' %>" data-bs-toggle="collapse" data-bs-target="#collapse<%= i %>" id="notification-read-form-btn-<%= i %>" aria-expanded="true" aria-controls="collapseOne">
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1 <%= notification.wasRead ? 'text-muted' : '' %>"><%= notification.subject %> </h5>
+            <small style="font-size: x-small;">
+              <% let time = Date.now() - notification.date; %>
+              <% time = Math.floor(time / 1000 / 60 / 60 / 24); %>
+              <% if(time < 0.5) { %>
+                Today
+              <% } else if(time < 2) { %> 
+                Yesterday
+              <% } else { %> 
+                <%= time %> days ago
+              <% } %> 
+            </small>
+          </div>
+        </button>
+      <% if(notification._id == id) { %> 
+      </a>
+      <% } else { %> 
+      </form>
+      <% } %> 
+      </form>
+      <div id="collapse<%= i %>" class="accordion-collapse collapse <%= notification._id == id ? 'show' : '' %>" aria-labelledby="#heading<%= i %>" data-bs-parent="#notificationAccordian">
+        <div class="accordion-body d-flex w-100 justify-content-between">
+          <p><%= notification.text.substring(0, notification.text.indexOf('days') + 4) %></p>
+          <form method="POST" action="/user/notifications/<%= notification._id %>?_method=DELETE" class="notification-delete-form">
+            <button class="btn btn-outline-danger"><i class="far fa-trash-alt"></i></button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <% }) %> 
+  </div>
+  <% if(currentUser.notifications.length && unreadNotifications.length) { %> 
+    <div class="col-10 col-md-8 text-center mb-3">
+      <form action="/user/notifications?_method=PUT" method="POST">
+        <button class="btn btn-outline-primary">Mark all as read</button>
+      </form>
+    </div>
+    <% } %>
+</div>
+
+<!-- <script src="/scripts/notifications.js"></script> -->

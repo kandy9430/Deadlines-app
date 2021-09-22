@@ -1,0 +1,55 @@
+<%- layout('./layouts/boilerplate') %> 
+<div class="row justify-content-center">
+  <div class="col-10 col-md-8 col-lg-6">
+    <section class="card">
+      <h1 class="card-header">New Document</h1>
+      <form class="card-body category-form needs-validation" action="/deadlines/new/document/category" method="POST" novalidate>
+        <div>
+          <label class="form-label">Category:</label>
+          <select class="form-select category-select" name="category" id="category" required>
+            <option value="undefined">--Select Category--</option>
+            <% for(category of categories) { %> 
+            <option value="<%= category.name %>" <%= selectedCategory && category.name === selectedCategory.name ? 'selected' : '' %>><%= category.name %></option>
+            <% } %> 
+          </select>
+          <div class="invalid-feedback">
+            Please select a category
+          </div>
+        </div>
+      </form>
+    
+      <% if(selectedCategory) { %> 
+      <form class="card-body expiration-form needs-validation" action="/deadlines/new/document" method="POST" novalidate>
+        <div class="mb-3">
+          <label class="form-label">Document Name:</label>
+          <select class="form-select" name="document" id="document" required>
+            <option selected disabled value="">--Select Document--</option>
+            <% for(document of selectedCategory.documents) { %> 
+            <option value="<%= document._id %>"><%= document.name %></option>
+            <% } %> 
+          </select>
+          <div class="invalid-feedback">
+            Please choose a document
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="expires">Expiration Date:</label>
+          <input class="form-control" type="date" name="expires" id="expires" required>
+          <div class="invalid-feedback">
+            Please enter the document's expiration date
+          </div>
+        </div>
+        <div class="d-grid col-6 mx-auto">
+          <button class="btn btn-success">Submit</button>
+        </div>
+      </form>
+      <% } %> 
+      <div class="card-footer">
+        <a class="" href="/deadlines/new/type">Previous</a>
+      </div>
+    </section>
+  </div>
+</div>
+
+
+<script src="/scripts/newDocumentCategory.js"></script>
