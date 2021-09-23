@@ -1,8 +1,36 @@
-const Joi = require("joi");
-Joi.objectId = require("joi-objectid")(Joi);
+const sanitizeHtml = require("sanitize-html");
+
+const BaseJoi = require("joi");
+BaseJoi.objectId = require("joi-objectid")(BaseJoi);
+
+const sanitizeHtmlExtension = (joi) => {
+  return {
+    type: "string",
+    base: BaseJoi.string(),
+    messages: {
+      "string.escapeHTML": "{{#label}} must not include HTML!",
+    },
+    rules: {
+      escapeHTML: {
+        validate(value, helpers) {
+          const clean = sanitizeHtml(value, {
+            allowedTags: [],
+            allowedAttributes: {},
+          });
+          if (clean !== value) {
+            return helpers.error("string.escapeHTML", { value });
+          }
+          return clean;
+        },
+      },
+    },
+  };
+};
+
+const Joi = BaseJoi.extend(sanitizeHtmlExtension);
 
 module.exports.categorySchema = Joi.object({
-  name: Joi.string().required(),
+  name: Joi.string().required().escapeHTML(),
 });
 
 module.exports.documentSchema = Joi.object({
@@ -10,10 +38,10 @@ module.exports.documentSchema = Joi.object({
   category: Joi.alternatives()
     .try(Joi.array().items(Joi.objectId()), Joi.objectId())
     .required(),
-  name: Joi.string().required(),
-  description: Joi.string().required(),
-  issuingAuthority: Joi.string().required(),
-  website: Joi.string().required(),
+  name: Joi.string().required().escapeHTML(),
+  description: Joi.string().required().escapeHTML(),
+  issuingAuthority: Joi.string().required().escapeHTML(),
+  website: Joi.string().required().escapeHTML(),
 });
 
 module.exports.expirationSchema = Joi.object({
@@ -22,8 +50,8 @@ module.exports.expirationSchema = Joi.object({
 });
 
 module.exports.recurringSchema = Joi.object({
-  category: Joi.string().required(),
-  name: Joi.string().required(),
+  category: Joi.string().required().escapeHTML(),
+  name: Joi.string().required().escapeHTML(),
   interval: Joi.number().min(1).max(12).required(),
   nextDue: Joi.date().greater("now").required(),
 });

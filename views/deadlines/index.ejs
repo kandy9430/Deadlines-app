@@ -10,7 +10,9 @@
           <div class="fw-bold "><%= expiration.document.name %></div>
           Expires: <span class="<%= expiration.daysUntilDue <= 180 ? 'text-danger' : 'text-body' %>"><%= expiration.formattedExpires %></span>
         </div>
-        <span class="badge <%= expiration.daysUntilDue <= 180 ? 'bg-danger' : 'bg-primary' %> rounded-pill"><%= expiration.daysUntilDue >= 365 ? Math.floor(expiration.daysUntilDue / 365) : expiration.daysUntilDue %><%= expiration.daysUntilDue >= 365 ? ' year(s)' : ' days' %></span>
+        <% if(expiration.daysUntilDue <= 180) { %> 
+        <span class="badge bg-danger rounded-pill"><%= expiration.daysUntilDue >= 365 ? Math.floor(expiration.daysUntilDue / 365) : expiration.daysUntilDue %><%= expiration.daysUntilDue >= 365 ? ' year(s)' : ' days' %></span>
+        <% } %> 
       </a>
   <% } %> 
   <a href="/deadlines/new/document">+ New Document</a>
@@ -24,7 +26,9 @@
           <div class="fw-bold"><%= r.name %></div>
           Next Due: <span class="<%= r.daysUntilDue <= 14 ? 'text-danger' : 'text-body' %>"><%= r.formattedDueDate %></span>
         </div>
-        <span class="badge <%= r.daysUntilDue <= 14 ? 'bg-danger' : 'bg-primary' %> rounded-pill"><%= r.daysUntilDue %> days</span>
+        <% if(r.daysUntilDue <= 14) { %> 
+        <span class="badge bg-danger %> rounded-pill"><%= r.daysUntilDue %> days</span>
+        <% } %> 
       </a>
   <% } %> 
   <a href="/deadlines/new/recurring">+ New Recurring</a>

@@ -7,8 +7,15 @@ const ExpressError = require("./utils/expressError");
 const Category = require("./models/document/category");
 const catchAsync = require("./utils/catchAsync");
 const User = require("./models/user");
+const {
+  scriptSrcUrls,
+  styleSrcUrls,
+  connectSrcUrls,
+  fontSrcUrls,
+} = require("./utils/helmet");
 
 const path = require("path");
+
 const engine = require("ejs-mate");
 const mongoose = require("mongoose");
 const session = require("express-session");
@@ -16,6 +23,8 @@ const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const methodOverride = require("method-override");
+const mongoSanitize = require("express-mongo-sanitize");
+const helmet = require("helmet");
 
 const express = require("express");
 const port = process.env.PORT || 3000;
@@ -47,14 +56,42 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(methodOverride("_method"));
+app.use(mongoSanitize());
+
+/*********** Helmet stuff *******/
+
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: [],
+      connectSrc: ["'self'", ...connectSrcUrls],
+      scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
+      styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
+      workerSrc: ["'self'", "blob:"],
+      objectSrc: [],
+      imgSrc: [
+        "'self'",
+        "blob:",
+        "data:",
+        "https://images.unsplash.com/",
+        "https://images.pexels.com/",
+      ],
+      fontSrc: ["'self'", ...fontSrcUrls],
+    },
+  })
+);
 
 // session
+const secret = process.env.SECRET;
+
 const sessionConfig = {
-  secret: "thisisnotagoodsecretchangelater",
+  name: "DeadlinesSession",
+  secret,
   resave: false,
   saveUninitialized: true,
   cookie: {
     httpOnly: true,
+    // secure: true,
     expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
     maxAge: 1000 * 60 * 60 * 24 * 7,
   },
@@ -102,10 +139,6 @@ app.get("/", (req, res) => {
   res.render("home");
 });
 
-// app.get("/alex", (req, res) => {
-//   res.send("<h1>I LOVE ALEX!!!!!!!</h1>");
-// });
-
 app.all("*", (req, res, next) => {
   next(new ExpressError("Page Not Found", 404));
 });
@@ -113,7 +146,7 @@ app.all("*", (req, res, next) => {
 app.use((err, req, res, next) => {
   const { statusCode = "500" } = err;
   if (!err.message) err.message = "Oh No! Something Went Wrong!";
-  res.status(statusCode).send(err.message);
+  res.status(statusCode).render("error", { err });
 });
 
 app.listen(port, () => {
